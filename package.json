@@ -1,0 +1,27 @@
+{
+  "name": "backend-challenge-projects",
+  "version": "1.0.0",
+  "description": "Backend demo",
+  "main": "index.ts",
+  "scripts": {
+    "start": "nodemon --exec ts-node ./index.ts",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "backend",
+    "node",
+    "demo",
+    "challenge",
+    "test"
+  ],
+  "author": "Cristian Martínez D'Urbano",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.19.2"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.21",
+    "@types/node": "^20.12.8",
+    "typescript": "^5.4.5"
+  }
+}
