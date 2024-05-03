@@ -1,10 +1,7 @@
 import { Request, Response } from "express";
 
-const taskService = require('../services/task');
+const taskService = require('../services/task.service');
 const responseUtils = require('../utils/utils');
-
-const knex = require('../config/knex-config');
-const table = 'task';
 
 exports.getTask = async (req: Request, res: Response) => {
 
@@ -42,10 +39,10 @@ exports.createTask = async (req: Request, res: Response) => {
         const tasks = await taskService.createTask(req.body);
 
         // Send the created tasks as a response
-        res.status(201).send(tasks);
+        return res.status(201).send(tasks);
     } catch (error: any) {
         console.error(error);
-        res.status(500).send(error.message || 'Internal server error');
+        return res.status(500).send(error.message || 'Internal server error');
     }
 }
 
@@ -57,13 +54,13 @@ exports.deleteTask = async (req: Request, res: Response) => {
 
         // Send appropriate response based on the number of rows affected
         if (rowsAffected > 0) {
-            res.status(200).send(rowsAffected.toString());
+            return res.status(200).send(rowsAffected.toString());
         } else {
-            res.status(404).send(`Id ${req.params.id} wasn't found in database`);
+            return res.status(404).send(`Id ${req.params.id} wasn't found in database`);
         }
-        
+
     } catch (error: any) {
         console.error(error);
-        res.status(500).send(error.message || 'Internal server error');
+        return res.status(500).send(error.message || 'Internal server error');
     }
 }

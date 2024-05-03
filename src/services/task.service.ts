@@ -1,4 +1,4 @@
-import { Task } from "../models/task";
+import { Task } from "../models/task.model";
 
 const knex = require('../config/knex-config');
 
@@ -21,7 +21,7 @@ export async function getTask(queryParams: IGetTaskParam) {
         .select('*')
         .where((qb: any) => queryParams.title !== undefined ? qb.where('title', 'like', `%${queryParams.title}%`) : '')
         .where((qb: any) => queryParams.completed !== undefined ? qb.where('completed', (queryParams.completed === "true" ? "1" : "0")) : '')
-        .orderBy(orderByQuery, 'desc')
+        .orderBy(orderByQuery, 'asc')
         .offset(offset)
 
     return await query;

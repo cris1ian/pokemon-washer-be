@@ -1,6 +1,6 @@
 // Utility function to generate success response
 function getSuccessResponse(data: any) {
-    return { success: true, data };
+    return data;
 }
 
 // Utility function to generate error response
