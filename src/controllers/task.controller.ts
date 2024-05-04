@@ -1,9 +1,31 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
+import jwt, { Secret } from 'jsonwebtoken';
 
 const taskService = require('../services/task.service');
 const responseUtils = require('../utils/utils');
 
-exports.getTask = async (req: Request, res: Response) => {
+const secretKey: Secret = process.env.SECRET_KEY || "";
+
+
+function verifyToken(req: Request, res: Response, next: NextFunction) {
+    const bearerHeader = req.headers['authorization'];
+
+    if (typeof bearerHeader !== 'undefined') {
+        const bearerToken = bearerHeader.split(' ')[1];
+        jwt.verify(bearerToken, secretKey, (err: any, authData: any) => {
+            console.log();
+            if (err) {
+                res.sendStatus(403);
+            } else {
+                next();
+            }
+        });
+    } else {
+        res.sendStatus(401);
+    }
+}
+
+exports.getTask = [verifyToken, async (req: Request, res: Response) => {
 
     try {
         const task = await taskService.getTask(req.query);
@@ -13,11 +35,10 @@ exports.getTask = async (req: Request, res: Response) => {
         return res.status(500).send(responseUtils.getErrorResponse('Error en el servidor', error));
     }
 
-}
+}]
 
-exports.editTask = async (req: Request, res: Response) => {
+exports.editTask = [verifyToken, async (req: Request, res: Response) => {
 
-    // Check that body isn't empty
     if (Object.keys(req.body).length === 0) { return res.status(400).send('Empty body') }
 
     try {
@@ -31,28 +52,24 @@ exports.editTask = async (req: Request, res: Response) => {
         console.error(error);
         return res.status(500).send(error);
     }
-}
+}]
 
-exports.createTask = async (req: Request, res: Response) => {
+exports.createTask = [verifyToken, async (req: Request, res: Response) => {
     try {
-        // Call the service function to create the task
         const tasks = await taskService.createTask(req.body);
 
-        // Send the created tasks as a response
         return res.status(201).send(tasks);
     } catch (error: any) {
         console.error(error);
         return res.status(500).send(error.message || 'Internal server error');
     }
-}
+}]
 
 
-exports.deleteTask = async (req: Request, res: Response) => {
+exports.deleteTask = [verifyToken, async (req: Request, res: Response) => {
     try {
-        // Call the service function to delete the task
         const rowsAffected = await taskService.deleteTask(req.params.id);
 
-        // Send appropriate response based on the number of rows affected
         if (rowsAffected > 0) {
             return res.status(200).send(rowsAffected.toString());
         } else {
@@ -63,4 +80,4 @@ exports.deleteTask = async (req: Request, res: Response) => {
         console.error(error);
         return res.status(500).send(error.message || 'Internal server error');
     }
-}
+}]
