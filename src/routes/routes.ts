@@ -1,17 +1,24 @@
-import * as core from "express-serve-static-core";
+import { Express } from 'express'
+import { PokemonController } from '../controllers/pokemon.controller'
+// import { AuthController } from "../controllers/auth.controller";
 
-const api = '/api/v1';
+export class AppRoutes {
+    private api = process.env.API_VERSION
 
-const taskController = require('../controllers/task.controller');
-const authController = require('../controllers/auth.controller');
+    private readonly pokemonController: PokemonController
+    //   private readonly authController: AuthController;
 
-module.exports = (app: core.Express) => {
-    app.get(`${api}/task`, taskController.getTask);
-    app.post(`${api}/task`, taskController.createTask);
-    app.put(`${api}/task/:id`, taskController.editTask);
-    app.delete(`${api}/task/:id`, taskController.deleteTask);
+    constructor() {
+        this.pokemonController = new PokemonController()
+        // this.authController = new AuthController();
+    }
 
-    app.post(`${api}/auth/verify-token`, authController.verifyToken);
-    app.post(`${api}/auth/register`, authController.register);
-    app.post(`${api}/auth/login`, authController.login);
-};
+    public registerRoutes(app: Express): void {
+        app.get(`${this.api}/pokemon`, this.pokemonController.getPokemon.bind(this.pokemonController))
+
+        // Auth routes
+        // app.post(`${api}/auth/verify-token`, this.authController.verifyToken);
+        // app.post(`${api}/auth/register`, this.authController.register);
+        // app.post(`${api}/auth/login`, this.authController.login);
+    }
+}
