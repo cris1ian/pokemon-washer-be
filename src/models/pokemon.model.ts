@@ -1,68 +1,21 @@
-export interface IPokemon {
+import { parseableUrl, Sprites } from './pokemon-sprites.model'
+
+export interface IPokemonApiResponse {
+    height: number
     id: number
     name: string
-    is_main_series: boolean
-    generation: {
-        name: string
-        url: string
+    is_default: boolean
+    sprites: Sprites
+}
+
+export class PokemonReduced {
+    id: number
+    name: string
+    spriteUrl: parseableUrl | null
+
+    constructor(pokemon: IPokemonApiResponse) {
+        this.id = pokemon.id
+        this.name = pokemon.name
+        this.spriteUrl = pokemon.sprites.other['official-artwork'].front_default
     }
-    names: [
-        {
-            name: string
-            language: {
-                name: string
-                url: string
-            }
-        },
-    ]
-    effect_entries: [
-        {
-            effect: string
-            short_effect: string
-            language: {
-                name: string
-                url: string
-            }
-        },
-    ]
-    effect_changes: [
-        {
-            version_group: {
-                name: string
-                url: string
-            }
-            effect_entries: [
-                {
-                    effect: string
-                    language: {
-                        name: string
-                        url: string
-                    }
-                },
-            ]
-        },
-    ]
-    flavor_text_entries: [
-        {
-            flavor_text: string
-            language: {
-                name: string
-                url: string
-            }
-            version_group: {
-                name: string
-                url: string
-            }
-        },
-    ]
-    pokemon: [
-        {
-            is_hidden: boolean
-            slot: number
-            pokemon: {
-                name: string
-                url: string
-            }
-        },
-    ]
 }

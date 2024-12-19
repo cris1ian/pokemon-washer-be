@@ -6,19 +6,13 @@ export class AppRoutes {
     private api = process.env.API_VERSION
 
     private readonly pokemonController: PokemonController
-    //   private readonly authController: AuthController;
 
-    constructor() {
+    constructor(app: Express) {
         this.pokemonController = new PokemonController()
-        // this.authController = new AuthController();
+        this.registerRoutes(app)
     }
 
     public registerRoutes(app: Express): void {
         app.get(`${this.api}/pokemon`, this.pokemonController.getPokemon.bind(this.pokemonController))
-
-        // Auth routes
-        // app.post(`${api}/auth/verify-token`, this.authController.verifyToken);
-        // app.post(`${api}/auth/register`, this.authController.register);
-        // app.post(`${api}/auth/login`, this.authController.login);
     }
 }

@@ -1,8 +1,8 @@
-import { Request, Response, Express } from 'express'
+import { Request, Response } from 'express'
 import { PokemonService } from '../services/pokemon.service'
 import { ResponseUtils } from '../utils/response.utils'
-import { IPokemon } from '../models/pokemon.model'
-import { IApiPokemonArray } from '../models/pokemon-response.model'
+import { PokemonReduced } from '../models/pokemon.model'
+import { IGetPokemonResp } from '../models/pokemon-response.model'
 
 export class PokemonController {
     private pokemonService: PokemonService
@@ -16,7 +16,7 @@ export class PokemonController {
         const offset = typeof req.query.offset === 'string' ? req.query.offset : undefined
 
         try {
-            const pokemon: IApiPokemonArray<IPokemon> = await this.pokemonService.getPokemon({ limit, offset })
+            const pokemon: IGetPokemonResp<PokemonReduced> = await this.pokemonService.getPokemon({ limit, offset })
             res.status(200).send(ResponseUtils.getSuccessResponse('Pokemon fetched successfully', pokemon))
         } catch (error) {
             console.error(error)

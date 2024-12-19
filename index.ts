@@ -10,8 +10,7 @@ configDotenv()
 
 app.use(cors())
 
-// Register routes
-const appRoutes = new AppRoutes()
+const appRoutes = new AppRoutes(app)
 appRoutes.registerRoutes(app)
 
 const port = process.env.PORT ?? 3000

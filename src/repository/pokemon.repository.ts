@@ -1,6 +1,6 @@
 import axios, { AxiosInstance, AxiosResponse } from 'axios'
-import { IPokemon } from '../models/pokemon.model'
-import { IApiPokemonArray } from '../models/pokemon-response.model'
+import { IPokemonApiResponse } from '../models/pokemon.model'
+import { IPokemonApiResp, IPokemonUrl } from '../models/pokemon-response.model'
 
 export class PokemonRepository {
     private readonly apiClient: AxiosInstance
@@ -10,15 +10,26 @@ export class PokemonRepository {
         this.apiClient = axios.create({ baseURL: process.env.POKE_API, timeout: 5000 })
     }
 
-    async getPokemon(params: any): Promise<IApiPokemonArray<IPokemon>> {
+    async getPokemon(params: any): Promise<IPokemonApiResp<IPokemonUrl>> {
+        console.log(params, params.limit, params.offset)
         try {
-            console.log(this.pokemonApi)
-            const response: AxiosResponse<IApiPokemonArray<IPokemon>> = await this.apiClient.get(`${this.pokemonApi}/pokemon`, {
-                params: { limit: params.limit ?? 20, offset: params.offset },
+            const response: AxiosResponse<IPokemonApiResp<IPokemonUrl>> = await this.apiClient.get(`${this.pokemonApi}/pokemon`, {
+                params,
             })
             return response.data
         } catch (error) {
-            console.error(`Error fetching Pokémon '${name}':`, error)
+            console.error(`Error fetching Pokémon:`, error)
+            throw new Error('Failed to fetch Pokémon data')
+        }
+    }
+
+    /** I'll use this one to batch fetch some URLs in other responses */
+    async directUrlPokemonFetch(url: string): Promise<IPokemonApiResponse> {
+        try {
+            const response: AxiosResponse<IPokemonApiResponse> = await axios.get(url)
+            return response.data
+        } catch (error) {
+            console.error(`Error fetching URL ${url}:`, error)
             throw new Error('Failed to fetch Pokémon data')
         }
     }
