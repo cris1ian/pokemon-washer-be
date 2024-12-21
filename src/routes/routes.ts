@@ -1,6 +1,5 @@
 import { Express } from 'express'
 import { PokemonController } from '../controllers/pokemon.controller'
-// import { AuthController } from "../controllers/auth.controller";
 
 export class AppRoutes {
     private api = process.env.API_VERSION

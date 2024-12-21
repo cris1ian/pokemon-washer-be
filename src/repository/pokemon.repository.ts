@@ -11,7 +11,6 @@ export class PokemonRepository {
     }
 
     async getPokemon(params: any): Promise<IPokemonApiResp<IPokemonUrl>> {
-        console.log(params, params.limit, params.offset)
         try {
             const response: AxiosResponse<IPokemonApiResp<IPokemonUrl>> = await this.apiClient.get(`${this.pokemonApi}/pokemon`, {
                 params,
