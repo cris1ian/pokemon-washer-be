@@ -1,4 +1,4 @@
-# Demo Backend by Cristian Martínez D'Urbano
+# Backend Pokemon Take Home Challenge for Poplin
 
 For starting the app simply type:
 
