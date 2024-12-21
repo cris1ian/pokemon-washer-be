@@ -1,0 +1,24 @@
+services:
+  pokemon-washer-be:
+    # set name for the image
+    image: pokemon-washer-be_i
+
+    # Set the container name
+    container_name: pokemon-washer-be_c
+
+    environment:
+      NODE_ENV: production
+      POKE_API: https://pokeapi.co/api/v2
+      API_VERSION: /api/v1
+
+    # Build the image using the Dockerfile in the current context
+    build:
+      context: .
+      dockerfile: Dockerfile
+
+    # Map host port 8000 to container port 8000
+    ports:
+      - "3000:3000" #<host_port>:<container_port/protocol_port>
+
+      # Automatically restart the container if it stops
+    restart: always
